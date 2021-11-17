@@ -1,0 +1,18 @@
+.nothing__main-content {
+  align-items: center;
+  background: $primary; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    $second,
+    $primary
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, $second, $primary);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  p {
+      text-align: center;
+  }
+}
