@@ -10,8 +10,8 @@ export const LoginScreen = () => {
   const { loading } = useSelector((state) => state.ui);
 
   const [formValues, handleInputChange] = useForm({
-    email: "anthony@hotmail.com",
-    password: "123456",
+    email: "anthony.otoniel@hotmail.com",
+    password: "Anthony123456@123",
   });
 
   const { email, password } = formValues;
