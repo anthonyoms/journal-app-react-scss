@@ -6,7 +6,9 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "dom": "0.0.3",
+    "enzyme-to-json": "^3.6.2",
     "firebase": "^9.4.1",
     "moment": "^2.29.1",
     "react": "^17.0.2",
@@ -47,6 +49,8 @@
   },
   "devDependencies": {
     "chokidar": "^3.5.2",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "sass": "^1.43.4"
   }
 }
