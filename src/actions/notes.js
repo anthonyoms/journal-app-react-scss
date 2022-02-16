@@ -51,7 +51,7 @@ export const startLoadingNotes = (uid) => {
 export const startSaveNote = (note) => {
   return async (dispatch, getState) => {
     const { uid } = getState().auth;
-    console.log(note);
+   // console.log(note);
     if (!note.url) {
       delete note.url;
     }

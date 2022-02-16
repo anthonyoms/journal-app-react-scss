@@ -1,7 +1,11 @@
-import Enzyme from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme from "enzyme";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 
-import {createSerializer} from 'enzyme-to-json';
+import { createSerializer } from "enzyme-to-json";
 
-expect.addSnapshotSerializer(createSerializer({mode: 'deep'}));
+expect.addSnapshotSerializer(createSerializer({ mode: "deep" }));
 Enzyme.configure({ adapter: new Adapter() });
+
+const noScroll = () => {};
+
+Object.defineProperty(window, "scrollTo", { value: noScroll, writable: true });

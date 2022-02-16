@@ -1,23 +1,48 @@
-/*** @jest-environment node */
 import configureStore from "redux-mock-store"; //ES6 modules
 import thunk from "redux-thunk";
 import { types } from "../../types/types";
-import { startNewNote } from "../../actions/notes";
+import {
+  startNewNote,
+  startLoadingNotes,
+  startSaveNote,
+  startUploading,
+} from "../../actions/notes";
 import { db } from "../../firebase/firebase-config";
+import { fileUpload } from "../../helpers/fileUpload";
+
+jest.mock("../../helpers/fileUpload", () => ({
+  fileUpload: jest.fn(() => {
+    return "https://hola-mundo.com/cosa.jpg";
+    //return Promise.resolve("https://hola-mundo.com/cosa.jpg");
+  }),
+}));
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-const store = mockStore({
+const initlState = {
   auth: {
     uid: "TESTING",
   },
-});
+  notes: {
+    active: {
+      id: "5ryirxpVbvbYnhH7LTUx",
+      title: "Hola",
+      body: "Mundo",
+    },
+  },
+};
+
+let store = mockStore(initlState);
 
 describe("Pruebas con las acciones de notes", () => {
+  beforeEach(() => {
+    store = mockStore(initlState);
+  });
   afterAll(() => {
     db.disableNetwork();
   });
+
   test("debe de crear una nueva nota startNewNote", async () => {
     await store.dispatch(startNewNote());
 
@@ -40,7 +65,50 @@ describe("Pruebas con las acciones de notes", () => {
         date: expect.any(Number),
       },
     });
-    const {id} = actions[0].payload;
+    const { id } = actions[0].payload;
     await db.doc(`TESTING/journal/notes/${id}`).delete();
+  });
+
+  test("startLoadingNotes debe cargar las notas", async () => {
+    await store.dispatch(startLoadingNotes("TESTING"));
+
+    const actions = await store.getActions();
+
+    expect(actions[0]).toEqual({
+      type: types.notesLoad,
+      payload: expect.any(Array),
+    });
+    const expected = {
+      id: expect.any(String),
+      title: expect.any(String),
+      body: expect.any(String),
+      date: expect.any(Number),
+    };
+    expect(actions[0].payload[0]).toMatchObject(expected);
+  });
+
+  test("startSaveNote debe actuzalizar la nota ", async () => {
+    const note = {
+      id: "5ryirxpVbvbYnhH7LTUx",
+      title: "titulo",
+      body: "body",
+    };
+    await store.dispatch(startSaveNote(note));
+
+    const actions = store.getActions();
+
+    expect(actions[0].type).toBe(types.notesUpdated);
+
+    const docRef = await db.doc(`/TESTING/journal/notes/${note.id}`).get();
+    expect(docRef.data().title).toBe(note.title);
+  });
+
+  test("startUploading debe actualizar el url del entry", async () => {
+    const file = new File([], "foto.jpg");
+
+    await store.dispatch(startUploading(file));
+
+    const docRef = await db.doc(`/TESTING/journal/notes/5ryirxpVbvbYnhH7LTUx`).get();
+    expect(docRef.data().url).toBe('https://hola-mundo.com/cosa.jpg');
   });
 });

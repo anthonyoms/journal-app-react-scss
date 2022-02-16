@@ -6,7 +6,8 @@ import { noteLogout } from "./notes";
 export const startLoginEmailPassword = (email, password) => {
   return (dispatch) => {
     dispatch(startLoading());
-    firebase
+
+    return firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
@@ -23,12 +24,13 @@ export const startLoginEmailPassword = (email, password) => {
 
 export const startRegisterEmailPasswordName = (email, password, name) => {
   return (dispatch) => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(async ({ user }) => {
-        await user.updateProfile({ displayName: name });
+    firebase;
+    const auth = getAuth();
+    return signInWithEmailAndPassword(auth, email, password)
+      .then(({ user }) => {
         dispatch(login(user.uid, user.displayName));
+
+        dispatch(finishLoading());
       })
       .catch((e) => {
         console.log(e);
