@@ -17,7 +17,7 @@ const testTypes = {
   notesDelete: "[Notes] Delete note",
   notesLogoutCleaning: "[Notes] Logout Cleaning",
 };
-console.log(types);
+
 describe("Pruebas archivo types", () => {
   test("Deben coincidir los tipos", () => {
     expect(testTypes).toEqual(types);
