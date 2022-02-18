@@ -18,7 +18,7 @@ jest.mock("../../../actions/auth", () => ({
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 
-const initlState = {
+const initState = {
   auth: {},
   ui: {
     loading: false,
@@ -26,7 +26,7 @@ const initlState = {
   },
 };
 
-let store = mockStore(initlState);
+let store = mockStore(initState);
 store.dispatch = jest.fn();
 const wrapper = mount(
   <Provider store={store}>
@@ -39,7 +39,7 @@ const wrapper = mount(
 );
 describe("Pruebas en el <LoginScreen />", () => {
   beforeEach(() => {
-    store = mockStore(initlState);
+    store = mockStore(initState);
     jest.clearAllMocks;
   });
 
